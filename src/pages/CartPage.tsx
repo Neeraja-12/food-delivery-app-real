@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { RestaurantService } from '@/services/restaurant-service';
 import { useCart } from '@/context/CartContext';
+import { useOrders } from '@/context/OrderContext';
 import CartHeader from '@/components/cart/CartHeader';
 import CartItem from '@/components/cart/CartItem';
 import AddressInput from '@/components/cart/AddressInput';
@@ -32,6 +33,7 @@ const CartPage = () => {
   const {
     items,
     restaurantId,
+    restaurantName,
     address,
     setAddress,
     increase,
@@ -40,6 +42,8 @@ const CartPage = () => {
     clear,
     subtotal,
   } = useCart();
+
+  const { addOrder } = useOrders();
 
   const [selectedPayment, setSelectedPayment] = useState<string>('cod');
   const [loading, setLoading] = useState(false);
@@ -81,13 +85,31 @@ const CartPage = () => {
 
     RestaurantService.placeOrder(restaurantId || 1, orderItems, address)
       .then(response => {
+        // Save to OrderContext so it appears in /orders
+        const saved = addOrder({
+          restaurantId: restaurantId || 1,
+          restaurantName: restaurantName || 'Restaurant',
+          items: orderItems,
+          subtotal,
+          discount,
+          total,
+          address,
+          paymentMethod: selectedPayment,
+          estimatedDelivery: response.estimatedTime || 30,
+        });
+
         setOrderSuccess(true);
-        toast.success(`Order #${response.orderId} placed successfully!`);
-        toast.info(`Your food will arrive in approximately ${response.estimatedTime} minutes`);
+        toast.success(`Order #${saved.id} placed successfully!`);
+        toast.info(
+          `Your food will arrive in approximately ${saved.estimatedDelivery} minutes`
+        );
+
         clear();
+
+        // Redirect to the live tracking page
         setTimeout(() => {
-          navigate('/');
-        }, 3000);
+          navigate(`/orders/${saved.id}`);
+        }, 1500);
       })
       .catch(error => {
         toast.error(error.message || "Failed to place order");

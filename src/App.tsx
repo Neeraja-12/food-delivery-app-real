@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import { CartProvider } from "@/context/CartContext";
+import { OrderProvider } from "@/context/OrderContext";
 
 import Home from "./pages/Home";
 import Index from "./pages/Index";
@@ -46,49 +47,52 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
-  <CartProvider>
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <div className="app-container low-contrast min-h-screen flex flex-col">
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/classic" element={<Index />} />
-                  <Route path="/search" element={<Search />} />
-                  <Route path="/offers" element={<Offers />} />
-                  <Route path="/help" element={<Help />} />
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/team" element={<NotFound />} />
-                  <Route path="/careers" element={<NotFound />} />
-                  <Route path="/partner" element={<NotFound />} />
-                  <Route path="/ride" element={<Ride />} />
-                  <Route path="/terms" element={<NotFound />} />
-                  <Route path="/privacy" element={<NotFound />} />
-                  <Route path="/cookies" element={<NotFound />} />
-                  <Route path="/category/:category" element={<Category />} />
-                  <Route path="/restaurant/:id" element={<RestaurantMenu />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/favorites" element={<Favorites />} />
-                  <Route path="/orders" element={<OrderTracking />} />
-                  <Route path="/track-order" element={<OrderTracking />} />
-                  <Route path="/restaurants" element={<Navigate to="/category/all" replace />} />
-                  <Route path="/menu" element={<Navigate to="/restaurant/1" replace />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </TooltipProvider>
-          </div>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </HelmetProvider>
-  </CartProvider>
+  <OrderProvider>
+    <CartProvider>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <div className="app-container low-contrast min-h-screen flex flex-col">
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <Suspense fallback={<LoadingFallback />}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/classic" element={<Index />} />
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/offers" element={<Offers />} />
+                    <Route path="/help" element={<Help />} />
+                    <Route path="/signin" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/team" element={<NotFound />} />
+                    <Route path="/careers" element={<NotFound />} />
+                    <Route path="/partner" element={<NotFound />} />
+                    <Route path="/ride" element={<Ride />} />
+                    <Route path="/terms" element={<NotFound />} />
+                    <Route path="/privacy" element={<NotFound />} />
+                    <Route path="/cookies" element={<NotFound />} />
+                    <Route path="/category/:category" element={<Category />} />
+                    <Route path="/restaurant/:id" element={<RestaurantMenu />} />
+                    <Route path="/cart" element={<CartPage />} />
+                    <Route path="/favorites" element={<Favorites />} />
+                    <Route path="/orders" element={<OrderTracking />} />
+                    <Route path="/orders/:orderId" element={<OrderTracking />} />
+                    <Route path="/track-order" element={<OrderTracking />} />
+                    <Route path="/restaurants" element={<Navigate to="/category/all" replace />} />
+                    <Route path="/menu" element={<Navigate to="/restaurant/1" replace />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </TooltipProvider>
+            </div>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </HelmetProvider>
+    </CartProvider>
+  </OrderProvider>
 );
 
 export default App;
