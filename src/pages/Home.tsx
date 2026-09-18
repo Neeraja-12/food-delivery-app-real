@@ -8,7 +8,6 @@ import { Footer } from '@/components/Footer';
 import { DialogComponents } from '@/components/DialogComponents';
 import { NearbyRestaurants } from '@/components/NearbyRestaurants';
 import { toast } from '@/hooks/use-toast';
-import RecentOrders from '@/components/RecentOrders';
 
 const Home = () => {
   React.useEffect(() => {
@@ -31,11 +30,6 @@ const Home = () => {
       <main className="flex-1">
         <section className="container mx-auto px-4 pt-8 pb-16">
           <h1 className="text-3xl font-bold mb-8">Food delivery with real-time tracking</h1>
-
-          {/* Recent Orders (only shows if you have any) */}
-          <div className="mb-12">
-            <RecentOrders />
-          </div>
 
           {/* Nearby Restaurants */}
           <div className="mb-12">
